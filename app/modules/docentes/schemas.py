@@ -1,10 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, Field, field_validator
-from sqlmodel import Session, select
-
-from app.core.db import engine
+from pydantic import BaseModel, Field
 
 class DocenteBase(BaseModel):
     nombre: str = Field(default=None)
@@ -15,9 +12,17 @@ class DocenteBase(BaseModel):
     celular: str = Field(default=None)
     profesion: str = Field(default=None)
 
-class CustomerCreate(DocenteBase):
+class DocenteCreate(DocenteBase):
     pass
 
-
-class CustomerUpdate(DocenteBase):
+class DocenteUpdate(DocenteBase):
     pass
+
+class DocenteRead(DocenteBase):
+    id: int
+
+class Docente(DocenteBase):
+    id: int
+
+    class Config:
+        orm_mode = True

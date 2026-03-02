@@ -14,13 +14,6 @@ class DocenteService:
     # CREATE
     # ----------------------
     def create_docente(self, item_data: DocenteCreate):
-        # Validate Category
-        if item_data.category_id:
-            if not self.repository.check_category_exists(item_data.category_id):
-                raise NotFoundException(
-                    detail=f"Category Id:{item_data.category_id} doesn't exist"
-                )
-
         docente_db = Docente.model_validate(item_data.model_dump())
 
         try:
@@ -33,7 +26,7 @@ class DocenteService:
     # GET ONE
     # ----------------------
     def get_docente(self, item_id: int):
-        docente_db = self.repository.get_by_id_with_relations(item_id)
+        docente_db = self.repository.get_by_id(item_id)
 
         if not docente_db:
             raise NotFoundException(detail=self.no_docente)
@@ -52,7 +45,7 @@ class DocenteService:
     # GET ALL PLANS
     # ----------------------
     def get_docentes(self, offset: int = 0, limit: int = 100):
-        return self.repository.get_all_with_relations(offset, limit)
+        return self.repository.get_all(offset, limit)
 
     # DELETE
     # ----------------------

@@ -1,4 +1,5 @@
 from app.core.exceptions import InternalServerErrorException, NotFoundException
+from app.modules.docentes.repository import DocenteRepository
 
 from .models import Materia
 from .repository import MateriaRepository
@@ -8,17 +9,18 @@ from .schemas import MateriaCreate, MateriaUpdate
 class MateriaService:
     no_materia: str = "Materia doesn't exits"
 
-    def __init__(self, repository: MateriaRepository):
+    def __init__(self, repository: MateriaRepository, docente_repository: DocenteRepository):
         self.repository = repository
+        self.docente_repository = docente_repository
 
     # CREATE
     # ----------------------
     def create_materia(self, item_data: MateriaCreate):
-        # Validate Category
-        if item_data.category_id:
-            if not self.repository.check_category_exists(item_data.category_id):
+        # Validate Docente
+        if item_data.docente_id:
+            if not self.docente_repository.get_by_id(item_data.docente_id):
                 raise NotFoundException(
-                    detail=f"Category Id:{item_data.category_id} doesn't exist"
+                    detail=f"Docente Id:{item_data.docente_id} doesn't exist"
                 )
 
         materia_db = Materia.model_validate(item_data.model_dump())
@@ -33,7 +35,7 @@ class MateriaService:
     # GET ONE
     # ----------------------
     def get_materia(self, item_id: int):
-        materia_db = self.repository.get_by_id_with_relations(item_id)
+        materia_db = self.repository.get_by_id(item_id)
 
         if not materia_db:
             raise NotFoundException(detail=self.no_materia)
@@ -42,6 +44,12 @@ class MateriaService:
     # UPDATE
     # ----------------------
     def update_materia(self, item_id: int, item_data: MateriaUpdate):
+        # Validate Docente
+        if item_data.docente_id:
+            if not self.docente_repository.get_by_id(item_data.docente_id):
+                raise NotFoundException(
+                    detail=f"Docente Id:{item_data.docente_id} doesn't exist"
+                )
         item_data_dict = item_data.model_dump(exclude_unset=True)
         updated_materia = self.repository.update(item_id, item_data_dict)
 
@@ -52,7 +60,7 @@ class MateriaService:
     # GET ALL PLANS
     # ----------------------
     def get_materias(self, offset: int = 0, limit: int = 100):
-        return self.repository.get_all_with_relations(offset, limit)
+        return self.repository.get_all(offset, limit)
 
     # DELETE
     # ----------------------
