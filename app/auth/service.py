@@ -35,7 +35,6 @@ class AuthService:
         user_data_dict["password_hash"] = hashed_password
         user_data_dict["is_superuser"] = True
         new_user = User(**user_data_dict)
-        new_user = User(**user_data_dict)
         self.session.add(new_user)
         self.session.commit()
         self.session.refresh(new_user)
