@@ -7,6 +7,9 @@ from app.modules.customers import routers as Customer
 from app.modules.products import routers as Product
 from app.modules.tasks import routers as Task
 
+from app.modules.docentes import routers as Docente
+from app.modules.materias import routers as Materia
+
 router = APIRouter()
 # Core
 router.include_router(Auth.router, prefix="/auth", tags=["Auth"])
