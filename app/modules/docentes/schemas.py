@@ -1,7 +1,7 @@
-from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, Field
+
 
 class DocenteBase(BaseModel):
     nombre: str = Field(default=None)
@@ -12,14 +12,18 @@ class DocenteBase(BaseModel):
     celular: str = Field(default=None)
     profesion: str = Field(default=None)
 
+
 class DocenteCreate(DocenteBase):
     pass
+
 
 class DocenteUpdate(DocenteBase):
     pass
 
+
 class DocenteRead(DocenteBase):
     id: int
+
 
 class Docente(DocenteBase):
     id: int

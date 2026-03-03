@@ -1,14 +1,11 @@
-from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlmodel import Column, DateTime, Field, Relationship
+from sqlmodel import Field
 
 from app.models.base_model import BaseModel
-from app.util.datetime import get_current_time
 
 if TYPE_CHECKING:
-    from ..catalog.materias_brand.models import MateriaBrand
-    from ..catalog.materias_category.models import MateriaCategory
+    pass
 
 
 class Materia(BaseModel, table=True):
@@ -20,7 +17,7 @@ class Materia(BaseModel, table=True):
     nombre: str = Field(default=None)
     description: Optional[str] = Field(default=None)
     carrera: str = Field(default=None)
-    
+
     docente_id: Optional[int] = Field(default=None, foreign_key="docente.id")
     # category: Optional["MateriaCategory"] = Relationship(back_populates="materias")
 

@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
+from app.auth.permissions import PermissionAction, PermissionChecker
+from app.auth.schemas import UserModulePermission
 from app.core.db import get_session
 from app.modules.docentes.repository import DocenteRepository
 
@@ -21,7 +23,13 @@ def get_service(session: Session = Depends(get_session)):
 # ----------------------
 @router.post("/", response_model=MateriaRead, status_code=status.HTTP_201_CREATED)
 async def create_materia(
-    materia_data: MateriaCreate, service: MateriaService = Depends(get_service)
+    materia_data: MateriaCreate,
+    service: MateriaService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="materias", required_permission=PermissionAction.CREATE
+        )
+    ),
 ):
     return service.create_materia(materia_data)
 
@@ -29,7 +37,15 @@ async def create_materia(
 # GET ONE - Obtener una tarea por ID
 # ----------------------
 @router.get("/{materia_id}", response_model=MateriaRead)
-async def get_materia(materia_id: int, service: MateriaService = Depends(get_service)):
+async def get_materia(
+    materia_id: int,
+    service: MateriaService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="materias", required_permission=PermissionAction.READ
+        )
+    ),
+):
     return service.get_materia(materia_id)
 
 
@@ -42,6 +58,11 @@ async def update_materia(
     materia_id: int,
     materia_data: MateriaUpdate,
     service: MateriaService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="materias", required_permission=PermissionAction.UPDATE
+        )
+    ),
 ):
     return service.update_materia(materia_id, materia_data)
 
@@ -53,6 +74,11 @@ async def get_materias(
     service: MateriaService = Depends(get_service),
     offset: int = 0,
     limit: int = 100,
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="materias", required_permission=PermissionAction.READ
+        )
+    ),
 ):
     return service.get_materias(offset, limit)
 
@@ -61,7 +87,13 @@ async def get_materias(
 # ----------------------
 @router.delete("/{materia_id}", status_code=status.HTTP_200_OK)
 async def delete_materia(
-    materia_id: int, service: MateriaService = Depends(get_service)
+    materia_id: int,
+    service: MateriaService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="materias", required_permission=PermissionAction.DELETE
+        )
+    ),
 ):
     service.delete_materia(materia_id)
     return {"detail": "ok"}

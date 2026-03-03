@@ -1,11 +1,9 @@
-from datetime import datetime
 from typing import Optional
 
-from pydantic import EmailStr
-from sqlmodel import Column, DateTime, Field
+from sqlmodel import Field
 
 from app.models.base_model import BaseModel
-from app.util.datetime import get_current_time
+
 
 class Docente(BaseModel, table=True):
     """

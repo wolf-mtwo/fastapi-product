@@ -9,7 +9,9 @@ from .schemas import MateriaCreate, MateriaUpdate
 class MateriaService:
     no_materia: str = "Materia doesn't exits"
 
-    def __init__(self, repository: MateriaRepository, docente_repository: DocenteRepository):
+    def __init__(
+        self, repository: MateriaRepository, docente_repository: DocenteRepository
+    ):
         self.repository = repository
         self.docente_repository = docente_repository
 

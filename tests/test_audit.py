@@ -2,12 +2,12 @@ import json
 from datetime import timedelta
 
 from fastapi.testclient import TestClient
+from scripts.archive_audit import archive_audit_logs
 from sqlmodel import Session, select
 
 from app.core.config import settings
 from app.models.audit import AuditLog
 from app.util.datetime import get_current_time
-from scripts.archive_audit import archive_audit_logs
 
 # Force enable audit for tests
 settings.ENABLE_ACCESS_AUDIT = True

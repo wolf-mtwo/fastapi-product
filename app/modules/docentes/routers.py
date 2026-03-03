@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
-from app.core.db import get_session
-
 from app.auth.permissions import PermissionAction, PermissionChecker
 from app.auth.schemas import UserModulePermission
+from app.core.db import get_session
+
 from .repository import DocenteRepository
-from .schemas import Docente, DocenteCreate, DocenteRead, DocenteUpdate
+from .schemas import DocenteCreate, DocenteRead, DocenteUpdate
 from .service import DocenteService
 
 router = APIRouter()
@@ -21,7 +21,13 @@ def get_service(session: Session = Depends(get_session)):
 # ----------------------
 @router.post("/", response_model=DocenteRead, status_code=status.HTTP_201_CREATED)
 async def create_docente(
-    docente_data: DocenteCreate, service: DocenteService = Depends(get_service)
+    docente_data: DocenteCreate,
+    service: DocenteService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="docentes", required_permission=PermissionAction.CREATE
+        )
+    ),
 ):
     return service.create_docente(docente_data)
 
@@ -34,9 +40,9 @@ async def get_docente(
     service: DocenteService = Depends(get_service),
     _: UserModulePermission = Depends(
         PermissionChecker(
-            module_slug="docentes", required_permission=PermissionAction.CREATE
+            module_slug="docentes", required_permission=PermissionAction.READ
         )
-    )
+    ),
 ):
     return service.get_docente(docente_id)
 
@@ -50,6 +56,11 @@ async def update_docente(
     docente_id: int,
     docente_data: DocenteUpdate,
     service: DocenteService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="docentes", required_permission=PermissionAction.UPDATE
+        )
+    ),
 ):
     return service.update_docente(docente_id, docente_data)
 
@@ -61,6 +72,11 @@ async def get_docentes(
     service: DocenteService = Depends(get_service),
     offset: int = 0,
     limit: int = 100,
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="docentes", required_permission=PermissionAction.READ
+        )
+    ),
 ):
     return service.get_docentes(offset, limit)
 
@@ -69,7 +85,13 @@ async def get_docentes(
 # ----------------------
 @router.delete("/{docente_id}", status_code=status.HTTP_200_OK)
 async def delete_docente(
-    docente_id: int, service: DocenteService = Depends(get_service)
+    docente_id: int,
+    service: DocenteService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="docentes", required_permission=PermissionAction.DELETE
+        )
+    ),
 ):
     service.delete_docente(docente_id)
     return {"detail": "ok"}
