@@ -3,6 +3,8 @@ from sqlmodel import Session
 
 from app.core.db import get_session
 
+from app.auth.permissions import PermissionAction, PermissionChecker
+from app.auth.schemas import UserModulePermission
 from .repository import DocenteRepository
 from .schemas import Docente, DocenteCreate, DocenteRead, DocenteUpdate
 from .service import DocenteService
@@ -27,7 +29,15 @@ async def create_docente(
 # GET ONE - Obtener una tarea por ID
 # ----------------------
 @router.get("/{docente_id}", response_model=DocenteRead)
-async def get_docente(docente_id: int, service: DocenteService = Depends(get_service)):
+async def get_docente(
+    docente_id: int,
+    service: DocenteService = Depends(get_service),
+    _: UserModulePermission = Depends(
+        PermissionChecker(
+            module_slug="docentes", required_permission=PermissionAction.CREATE
+        )
+    )
+):
     return service.get_docente(docente_id)
 
 
