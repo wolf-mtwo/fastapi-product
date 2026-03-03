@@ -28,10 +28,10 @@ from app.core.routers import router as api_router
 configure_logging()
 
 description = """
-API de un Sistema de tareas y productos, usando FastApi con Python.
+API es un sistema de pruebas para el desarrollo de software`.
 
 Funciones;
-- Crear, Leer, Actualizar y eliminar Tareas
+- Hace tareas basicas como Crear, Leer, Actualizar y eliminar Tareas.
 """
 # ... existing imports ...
 
@@ -51,9 +51,9 @@ app = FastAPI(
     redoc_url=None,  # Disable default Redoc to customize CDN
     license_info={"name": "MIT License", "url": "https://opensource.org/license/mit"},
     contact={
-        "name": "Henry Alejandro Taby Zenteno",
-        "url": "https://github.com/henrytaby",
-        "email": "henry.taby@gmail.com",
+        "name": "Wolf mtwo",
+        "url": "https://github.com/wolf-mtwo",
+        "email": "wolf.mtwo@gmail.com",
     },
     openapi_tags=[
         {

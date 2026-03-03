@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # App
-    PROJECT_NAME: str = "AppTransactionFastAPI"
+    PROJECT_NAME: str = "ProductsAPI"
     VERSION: str = "v1"
     PORT: int = 8000
 
